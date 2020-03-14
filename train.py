@@ -29,10 +29,9 @@ if __name__ == '__main__':
     # device setting
     device = helpers.bring_device(parser['gpu_idx'][0])
 
-    print (device,torch.cuda.is_available())
-
+   
     # devsetL = global_organ(parser,inp_dim, parser['DB_LA'], parser['dir_LA_meta_dev'], parser["DB_dev"])
-    devsetL= Data_prepare(parser['use_balance'],inp_dim, parser['DB_LA'],parser['dir_LA_meta_dev'], parser["DB_dev"])
+    devsetL= Data_prepare(parser['use_balance'],inp_dim, parser['DB_LA'],parser['data_eval'], parser["lab_eval"])
 
 
     devset_gen = data.DataLoader(devsetL,
@@ -41,15 +40,7 @@ if __name__ == '__main__':
                                  drop_last=False,
                                  num_workers=parser['nb_proc_db'])
 
-    # evalsetL = global_organ(parser,inp_dim, parser['DB_LA'], parser['dir_LA_meta_eval'],  parser["DB_eval"])
-    #
-    # evalset_gen = data.DataLoader(evalsetL,
-    #                              batch_size=parser['batch_size'],
-    #                              shuffle=False,
-    #                              drop_last=False,
-    #                              num_workers=parser['nb_proc_db'])
-    #
-
+   
 
     # set save directory
     save_dir = helpers.create_res_folder(parser)
@@ -92,8 +83,8 @@ if __name__ == '__main__':
 
         for epoch in tqdm(range(parser['epoch'])):
 
-            trnsetL = Data_prepare(parser['use_balance'], inp_dim, parser['DB_LA'], parser['dir_LA_meta_trn'],
-                                   parser["DB_trn"])
+            trnsetL = Data_prepare(parser['use_balance'], inp_dim, parser['DB_LA'], parser['data_trn'],
+                                   parser["lab_trn"])
 
             trnset_gen = data.DataLoader(trnsetL,
                                          batch_size=parser['batch_size'],
@@ -121,8 +112,6 @@ if __name__ == '__main__':
                     optimizer.step()
 
 
-                    # c_deltas = model.get_center_delta(code.data, model.centers, m_label, parser['c_loss_lr'])
-                    # model.centers = model.centers - c_deltas
                     pbar.set_description('epoch%d,loss:%.3f' % (epoch, loss))
                     pbar.update(1)
             eval_dev_struc.eval_process(model,tqdm,test_dev,epoch,True,  parser,experiment)

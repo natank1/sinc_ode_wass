@@ -1,0 +1,68 @@
+
+data_trn: train_data_folder_npy_files
+data_eval: eval_data_folder_npy_files
+
+
+lab_trn: labels_folde_for_trn 
+lab_eval: Labels_for_eval
+
+
+
+gpu_idx: [0] 
+nb_proc_db: 4
+save_dir:  folder_for_models 
+
+optimizer: Adam #sgd
+lr: 0.0005
+opt_mom: 0.9
+wd: 0.0001
+epoch: 400
+pretrn_epoch: 100
+
+batch_size: 8
+ 
+
+input_dim: 25000  #samples
+c_loss_lr: 0.5
+lrdec_milestones: [120, 150]
+lrdec: 0.2
+
+
+
+#flags
+comet_disable: 1
+nesterov: 0 #for sgd optim
+amsgrad: 1 #for adam optim
+save_best_only: 0
+
+ 
+vanilla_kl: 1
+only_eval: 0
+use_ode: 0
+non_vanilla_target: 1
+inp_data: 1
+ivector_dim: 400
+w_point_fp: 0.001
+test_ldc: 0
+load_model: 0
+#sinc
+fs: 8000 #remain sinc with g_extract!!!
+
+cw_len: 25000
+cw_shift: 10
+use_penalty: 0
+use_balance: 1
+#model-related
+model:
+  in_channels: 1
+  filts: [16, [16, 32], [32, 64], [64, 64], [64, 128], [128, 128]]
+
+  kernels: [[3, 7], [3, 7], [3, 7], [3, 7], [3, 7], [3, 7]]
+
+  strides: [1, 1, [2, 4], [2, 4], [2, 4], [2, 4]]
+
+  blocks: [1, 2, 2, 2]
+  nb_fc_node: 64 #4096 #64
+  nb_classes: 2
+  gru_node: 512 #org: 512
+  nb_gru_layer: 1
